@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
 describe('BookController (e2e)', () => {
@@ -16,11 +16,12 @@ describe('BookController (e2e)', () => {
     await app.init();
   });
 
-  it('/books (GET)', () => {
-    return request(app.getHttpServer())
+  it('/books (GET)', async () => {
+    const response = await request(app.getHttpServer())
       .get('/books')
-      .set('Authorization', `Bearer ${mockAccessToken}`)
-      .expect(200)
-      .expect([]);
+      .set('Authorization', `Bearer ${mockAccessToken}`);
+
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual([]);
   });
 });
